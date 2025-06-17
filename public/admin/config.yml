@@ -1,0 +1,22 @@
+backend:
+  name: github
+  repo: nick-cjyx9/astro-blog
+  branch: main # Branch to update (optional; defaults to master)
+  site_domain: http://localhost:4321
+  base_url: http://localhost:4321
+  auth_endpoint: /admin/auth
+media_folder: static/img
+public_folder: /img
+collections:
+  - name: blog
+    label: Blog
+    folder: content/blog
+    create: true
+    slug: '{{slug}}'
+    editor:
+      preview: false
+    fields:
+      - {label: Title, name: title, widget: string}
+      - {label: Publish Date, name: date, widget: datetime}
+      - {label: Description, name: description, widget: string}
+      - {label: Body, name: body, widget: markdown}
