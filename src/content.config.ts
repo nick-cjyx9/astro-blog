@@ -17,4 +17,15 @@ const blog = defineCollection({
   }),
 })
 
-export const collections = { blog }
+const friend = defineCollection({
+  loader: glob({ base: './src/content/friend', pattern: '**/*.{md,mdx}' }),
+  schema: () => z.object({
+    name: z.string(),
+    link: z.string(),
+    description: z.string().optional(),
+    avatar: z.string(),
+    color: z.string(),
+  }),
+})
+
+export const collections = { blog, friend }

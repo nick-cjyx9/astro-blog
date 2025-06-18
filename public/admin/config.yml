@@ -6,27 +6,46 @@ backend:
   base_url: http://localhost:4321
   auth_endpoint: /admin/auth
   commit_messages:
-    create: 'content: Create {{collection}} “{{slug}}”'
-    update: 'content: Update {{collection}} “{{slug}}”'
-    delete: 'content: Delete {{collection}} “{{slug}}”'
-    uploadMedia: 'content: Upload “{{path}}”'
-    deleteMedia: 'content: Delete “{{path}}”'
+    create: 'content: create a {{collection}}'
+    update: 'content: update a {{collection}}'
+    delete: 'content: delete a {{collection}}'
+    uploadMedia: 'content: upload “{{path}}”'
+    deleteMedia: 'content: delete “{{path}}”'
     openAuthoring: 'chore: {{message}}'
 media_folder: src/assets/images # 文件将被存储在仓库中的位置
 public_folder: src/assets/images # 上传媒体文件的 src 属性
+locale: zh-CN
+logo_url: /admin-logo.png
 collections:
   - name: blog
-    label: Blog
+    label: 文章
+    description: 博客文章
     folder: src/content/blog
     create: true
     slug: '{{slug}}'
     editor:
+      preview: true
+    fields:
+      - {label: Layout, name: layout, widget: hidden, default: ../../layouts/Post.astro}
+      - {label: 标题, name: title, widget: string}
+      - {label: 发布日期, name: pubDate, widget: datetime}
+      - {label: 标签, name: tags, widget: list}
+      - {label: 作者, name: author, widget: string}
+      - {label: 描述, name: description, widget: string}
+      - {label: 封面图, name: heroImage, widget: image}
+      - {label: 内容, name: body, widget: markdown}
+  - name: friend
+    label: 友链
+    description: 友链
+    folder: src/content/friend
+    create: true
+    identifier_field: name
+    slug: '{{slug}}'
+    editor:
       preview: false
     fields:
-      - {label: Title, name: title, widget: string}
-      - {label: Publish Date, name: pubDate, widget: datetime}
-      - {label: Description, name: description, widget: string}
-      - {label: Hero Image, name: heroImage, widget: image}
-      - {label: Content, name: body, widget: markdown}
-      - {label: Tags, name: tags, widget: list}
-      - {label: Author, name: author, widget: string}
+      - {label: 名称, name: name, widget: string}
+      - {label: 链接, name: link, widget: string}
+      - {label: 描述, name: description, widget: string}
+      - {label: 头像, name: avatar, widget: image}
+      - {label: 背景色, name: color, widget: color, default: '#000000', allowInput: true}
