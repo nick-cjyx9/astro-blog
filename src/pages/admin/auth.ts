@@ -1,5 +1,7 @@
 import { type APIRoute } from "astro";
 
+export const prerender = false;
+
 export const ALL: APIRoute = async ({ request, cookies }) => {
     const client_id = import.meta.env.GITHUB_CLIENT_ID;
     try {

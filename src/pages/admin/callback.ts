@@ -1,5 +1,7 @@
 import { type APIRoute } from "astro";
 
+export const prerender = false;
+
 function renderBody(status: string, content: any) {
   // TODO 不要 any
   const html = `
@@ -22,7 +24,6 @@ function renderBody(status: string, content: any) {
 export const ALL: APIRoute = async ({ request, cookies }) => {
   const client_id = import.meta.env.GITHUB_CLIENT_ID;
   const client_secret = import.meta.env.GITHUB_CLIENT_SECRET;
-  console.log(client_id, client_secret);
   try {
     const url = new URL(request.url);
     const server_state = url.searchParams.get('state');

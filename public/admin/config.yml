@@ -1,22 +1,32 @@
 backend:
   name: github
   repo: nick-cjyx9/astro-blog
-  branch: main # Branch to update (optional; defaults to master)
+  branch: master # Branch to update (optional; defaults to master)
   site_domain: http://localhost:4321
   base_url: http://localhost:4321
   auth_endpoint: /admin/auth
-media_folder: static/img
-public_folder: /img
+  commit_messages:
+    create: 'content: Create {{collection}} “{{slug}}”'
+    update: 'content: Update {{collection}} “{{slug}}”'
+    delete: 'content: Delete {{collection}} “{{slug}}”'
+    uploadMedia: 'content: Upload “{{path}}”'
+    deleteMedia: 'content: Delete “{{path}}”'
+    openAuthoring: 'chore: {{message}}'
+media_folder: src/assets/images # 文件将被存储在仓库中的位置
+public_folder: src/assets/images # 上传媒体文件的 src 属性
 collections:
   - name: blog
     label: Blog
-    folder: content/blog
+    folder: src/content/blog
     create: true
     slug: '{{slug}}'
     editor:
       preview: false
     fields:
       - {label: Title, name: title, widget: string}
-      - {label: Publish Date, name: date, widget: datetime}
+      - {label: Publish Date, name: pubDate, widget: datetime}
       - {label: Description, name: description, widget: string}
-      - {label: Body, name: body, widget: markdown}
+      - {label: Hero Image, name: heroImage, widget: image}
+      - {label: Content, name: body, widget: markdown}
+      - {label: Tags, name: tags, widget: list}
+      - {label: Author, name: author, widget: string}

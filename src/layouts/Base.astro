@@ -1,0 +1,18 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+const { title } = Astro.props;
+---
+<html lang="zh-CN">
+  <head><BaseHead title={title}/></head>
+  <body>
+    <nav>
+      <a href="/">主页</a>
+      <a href="/blog">文章</a>
+    </nav>
+    <main>
+      <slot />
+    </main>
+    <footer><Footer /></footer>
+  </body>
+</html>
