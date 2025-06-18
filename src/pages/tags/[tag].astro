@@ -1,14 +1,25 @@
 ---
 import Base from "../../layouts/Base.astro";
 import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  const paths = posts.flatMap((post) => 
+    post.data.tags?.map((tag) => ({ params: { tag } })) ?? []
+  );
+  return paths;
+}
+
 const posts = await getCollection("blog");
+const { tag } = Astro.params;
+const postsByTag = posts.filter((post) => post.data.tags?.includes(tag));
 ---
 
-<Base title="Posts">
-  <h1>My posts</h1>
+<Base title={tag}>
+  <h1>{tag}</h1>
   <ul>
     {
-      posts.map((post) => (
+      postsByTag.map((post) => (
         <li>
           <img
             src={post.data.heroImage}
