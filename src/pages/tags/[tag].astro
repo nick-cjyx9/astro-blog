@@ -22,7 +22,7 @@ const postsByTag = posts.filter((post) => post.data.tags?.includes(tag));
       postsByTag.map((post) => (
         <li>
           <img
-            src={post.data.heroImage}
+            src={post.data.heroImage?.src}
             alt={post.data.title}
             style={{ height: "100px" }}
           />

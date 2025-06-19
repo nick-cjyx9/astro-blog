@@ -13,7 +13,7 @@ backend:
     deleteMedia: 'content: delete “{{path}}”'
     openAuthoring: 'chore: {{message}}'
 media_folder: /src/assets/images # 文件将被存储在仓库中的位置
-public_folder: /src/assets/images # 上传媒体文件的 src 属性
+public_folder: ../../assets/images # 上传媒体文件的 src 属性
 logo_url: /admin-logo.png
 collections:
   - name: blog
@@ -30,7 +30,7 @@ collections:
       - {label: Tags, name: tags, widget: list}
       - {label: Author, name: author, widget: string}
       - {label: Description, name: description, widget: string}
-      - {label: Hero Image, name: heroImage, widget: image, required: false}
+      - {label: Hero Image, name: heroImage, widget: image, required: false, media_folder: coverImages}
       - {label: Body, name: body, widget: markdown}
   - name: friend
     label: Friends

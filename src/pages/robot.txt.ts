@@ -5,7 +5,6 @@ User-agent: *
 Allow: /
 Disallow: /functions
 Disallow: /hidden
-Disallow: /verification-follow_it-*
 Sitemap: ${sitemapURL.href}
 
 # DuckDuckGo lists font files in search results

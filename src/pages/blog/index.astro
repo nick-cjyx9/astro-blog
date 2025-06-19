@@ -1,22 +1,24 @@
 ---
 import Base from "../../layouts/Base.astro";
+import PostItem from "../../components/PostItem.astro";
 import { getCollection } from "astro:content";
 const posts = await getCollection("blog");
+const sorted_posts = posts.sort((a, b) => {
+  return new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime();
+});
 ---
 
 <Base title="Posts">
-  <h1>My posts</h1>
-  <ul>
+  <h1 class="text-2xl mb-4 font-extrabold dark:text-white">
+    全部博文
+    <small class="text-sm ms-1 font-semibold text-gray-500 dark:text-gray-400">
+    按发布日期排序
+  </small>
+  </h1>
+  <ul class="space-y-6 ">
     {
-      posts.map((post) => (
-        <li>
-          <img
-            src={post.data.heroImage}
-            alt={post.data.title}
-            style={{ height: "100px" }}
-          />
-          <a href={`/blog/${post.id}`}>{post.data.title}</a>
-        </li>
+      sorted_posts.map((post) => (
+        <PostItem post={post} />
       ))
     }
   </ul>

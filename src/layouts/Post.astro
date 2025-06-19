@@ -1,21 +1,64 @@
 ---
-import Base from "./Base.astro";
-const frontmatter = Astro.props.frontmatter || Astro.props;
+import type { InferEntrySchema } from 'astro:content';
+import Base from './Base.astro';
+const frontmatter: InferEntrySchema<'blog'> = Astro.props.frontmatter || Astro.props;
+function formatRelativeTime(date: Date) {
+  const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+  const now = new Date();
+  const diffInSeconds = Math.floor((now.valueOf() - date.valueOf()) / 1000);
+  const intervals = {
+    year: 31536000,
+    month: 2592000,
+    week: 604800,
+    day: 86400,
+    hour: 3600,
+    minute: 60,
+  };
+  for (const [unit, seconds] of Object.entries(intervals)) {
+    const interval = Math.floor(diffInSeconds / seconds);
+    if (interval >= 1) {
+      return rtf.format(-interval, unit as Intl.RelativeTimeFormatUnit);
+    }
+  }
+
+  return rtf.format(-Math.floor(diffInSeconds), 'second');
+}
+
+const relativeTime = formatRelativeTime(frontmatter.pubDate);
 ---
 
 <Base title={frontmatter.title}>
-  <h1>{frontmatter.title}</h1>
-  <p>{frontmatter.description}</p>
-  <p>
-    {
-      new Date(frontmatter.pubDate).toLocaleDateString("zh-CN", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-    }
-  </p>
   <article>
-    <slot />
+    <header class="space-y-2!">
+      <h1 class="text-3xl font-extrabold leading-tight text-gray-900 lg:text-4xl dark:text-white">
+        {frontmatter.title}
+      </h1>
+      <div class="tag-group">
+      {
+        frontmatter.tags?.map((tag) => (
+          <a
+            class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5
+     py-0.5 rounded dark:bg-blue-200 hover:bg-blue-200 dark:hover:bg-blue-300 dark:text-blue-800 mb-2"
+            href={`/tags/${tag}`}
+          >
+            #{tag}
+          </a>
+        ))
+      }
+      </div>
+      <div class="text-base">
+        <address class="inline">
+          Published by <a
+            rel="author"
+            class="text-gray-900 no-underline dark:text-white hover:underline"
+            href="#">{frontmatter.author}</a
+          >
+        </address><time class="ml-1" datetime={frontmatter.pubDate.toISOString()}
+          >{relativeTime}</time>
+      </div>
+    </header>
+    <main>
+      <slot />
+    </main>
   </article>
 </Base>
