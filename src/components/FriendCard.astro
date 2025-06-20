@@ -1,0 +1,13 @@
+---
+import { type InferEntrySchema } from "astro:content"
+const friend: InferEntrySchema<'friend'> = Astro.props.friend
+---
+
+
+<a href={friend.link} style={`border-color: ${friend.color};`} class="flex items-center p-6 bg-white border rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+  <img class="w-14 h-14 rounded-full" src={friend.avatar} alt={friend.name} />
+  <div class="font-medium dark:text-white ml-4">
+        <div class="text-lg font-semibold">{friend.name}</div>
+        <div class="text-sm text-gray-500 dark:text-gray-400">{friend.description}</div>
+    </div>
+</a>

@@ -1,0 +1,19 @@
+---
+import Base from "../layouts/Base.astro";
+import FriendCard from "../components/FriendCard.astro";
+import { getCollection } from "astro:content";
+const friends = await getCollection("friend");
+---
+
+<Base title="友链">
+  <h1>友链</h1>
+  <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {
+      friends.map((friend) => (
+        <li>
+          <FriendCard friend={friend.data} />
+        </li>
+      ))
+    }
+  </ul>
+</Base>

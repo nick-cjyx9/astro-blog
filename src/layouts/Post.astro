@@ -24,7 +24,7 @@ function formatRelativeTime(date: Date) {
   return rtf.format(-Math.floor(diffInSeconds), 'second');
 }
 
-const relativeTime = formatRelativeTime(frontmatter.pubDate);
+const relativeTime = frontmatter.pubDate ? formatRelativeTime(frontmatter.pubDate) : ''
 ---
 
 <Base title={frontmatter.title}>
@@ -53,7 +53,7 @@ const relativeTime = formatRelativeTime(frontmatter.pubDate);
             class="text-gray-900 no-underline dark:text-white hover:underline"
             href="#">{frontmatter.author}</a
           >
-        </address><time class="ml-1" datetime={frontmatter.pubDate.toISOString()}
+        </address><time class="ml-1" datetime={frontmatter.pubDate?.toISOString()}
           >{relativeTime}</time>
       </div>
     </header>
@@ -62,3 +62,4 @@ const relativeTime = formatRelativeTime(frontmatter.pubDate);
     </main>
   </article>
 </Base>
+ 
