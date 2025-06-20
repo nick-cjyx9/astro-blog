@@ -7,7 +7,7 @@
     "build": "astro build",
     "preview": "npx astro build && npx wrangler dev",
     "astro": "astro",
-    "deploy": "npx astro build && npx wrangler publish"
+    "publish": "npx astro build && npx wrangler deploy"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.5.4",
