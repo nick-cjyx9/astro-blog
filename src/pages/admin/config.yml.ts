@@ -6,7 +6,7 @@ export const GET: APIRoute = async () => {
     name: github
     repo: ${import.meta.env.GITHUB_REPO}
     branch: ${import.meta.env.REPO_BRANCH} # Branch to update (optional; defaults to master)
-    site_domain: ${import.meta.env.SITE_URL}
+    site_domain: ${new URL(import.meta.env.SITE_URL).hostname}
     base_url: ${import.meta.env.SITE_URL}
     auth_endpoint: /admin/auth
     commit_messages:
