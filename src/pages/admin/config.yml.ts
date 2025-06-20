@@ -1,14 +1,13 @@
 import { type APIRoute } from 'astro';
-import { GITHUB_REPO, SITE_URL, REPO_BRANCH } from '../../consts';
 
 export const GET: APIRoute = async () => {
   const config = `
   backend:
     name: github
-    repo: ${GITHUB_REPO}
-    branch: ${REPO_BRANCH} # Branch to update (optional; defaults to master)
-    site_domain: ${new URL(SITE_URL).hostname}
-    base_url: ${SITE_URL}
+    repo: ${import.meta.env.GITHUB_REPO}
+    branch: ${import.meta.env.REPO_BRANCH} # Branch to update (optional; defaults to master)
+    site_domain: ${new URL(import.meta.env.SITE_URL).hostname}
+    base_url: ${import.meta.env.SITE_URL}
     auth_endpoint: /admin/auth
     commit_messages:
       create: 'content: create {{collection}} {{slug}}'
