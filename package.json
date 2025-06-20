@@ -26,6 +26,7 @@
     "@antfu/eslint-config": "^4.14.1",
     "eslint": "^9.28.0",
     "prettier": "^3.5.3",
-    "prettier-plugin-tailwindcss": "^0.6.12"
+    "prettier-plugin-tailwindcss": "^0.6.12",
+    "wrangler": "^4.20.3"
   }
 }
