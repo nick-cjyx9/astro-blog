@@ -2,24 +2,105 @@
 import Base from "../../layouts/Base.astro";
 import PostItem from "../../components/PostItem.astro";
 import { getCollection } from "astro:content";
+
 const posts = await getCollection("blog");
 const sorted_posts = posts.sort((a, b) => {
   return new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime();
 });
+
+// 获取一些统计信息
+const totalPosts = sorted_posts.length;
+const allTags = sorted_posts
+  .flatMap(post => post.data.tags || [])
+  .filter(Boolean);
+const uniqueTags = [...new Set(allTags)];
+
+// 获取最新文章
+const latestPost = sorted_posts[0];
 ---
 
-<Base title="Posts">
-  <h1 class="text-2xl mb-4 font-extrabold dark:text-white">
-    全部博文
-    <small class="text-sm ms-1 font-semibold text-gray-500 dark:text-gray-400">
-    按发布日期排序
-  </small>
-  </h1>
-  <ul class="space-y-6 ">
-    {
-      sorted_posts.map((post) => (
+<Base 
+  title="全部文章" 
+  description={`浏览 Nick's Blog 的所有文章，共 ${sorted_posts.length} 篇。`}
+  type="website"
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <!-- 页面标题和统计 -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+        全部文章
+      </h1>
+      <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-6">
+        记录技术学习、项目经验和思考感悟的地方
+      </p>
+      
+      <!-- 统计信息 -->
+      <div class="flex flex-wrap justify-center gap-6 mb-8">
+        <div class="flex items-center px-4 py-2 bg-blue-50 dark:bg-blue-900/20 rounded-full">
+          <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path>
+          </svg>
+          <span class="text-blue-600 dark:text-blue-400 font-medium">
+            {totalPosts} 篇文章
+          </span>
+        </div>
+        
+        <div class="flex items-center px-4 py-2 bg-green-50 dark:bg-green-900/20 rounded-full">
+          <svg class="w-5 h-5 text-green-600 dark:text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>
+          </svg>
+          <span class="text-green-600 dark:text-green-400 font-medium">
+            {uniqueTags.length} 个标签
+          </span>
+        </div>
+        
+        {latestPost && (
+          <div class="flex items-center px-4 py-2 bg-purple-50 dark:bg-purple-900/20 rounded-full">
+            <svg class="w-5 h-5 text-purple-600 dark:text-purple-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="text-purple-600 dark:text-purple-400 font-medium">
+              最新更新
+            </span>
+          </div>
+        )}
+      </div>
+      
+      <!-- 排序提示 -->
+      <div class="flex items-center justify-center text-sm text-gray-500 dark:text-gray-400">
+        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h7a1 1 0 100-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" clip-rule="evenodd"></path>
+        </svg>
+        按发布时间排序（最新优先）
+      </div>
+    </div>
+
+    <!-- 文章列表 -->
+    <div class="space-y-8">
+      {sorted_posts.map((post) => (
         <PostItem post={post} />
-      ))
-    }
-  </ul>
+      ))}
+    </div>
+
+    <!-- 空状态 -->
+    {sorted_posts.length === 0 && (
+      <div class="text-center py-16">
+        <div class="mx-auto w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-6">
+          <svg class="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">暂无文章</h3>
+        <p class="text-gray-500 dark:text-gray-400 mb-6">还没有发布任何文章，敬请期待！</p>
+        <a 
+          href="/" 
+          class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+        >
+          返回首页
+          <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+        </a>
+      </div>
+    )}
 </Base>

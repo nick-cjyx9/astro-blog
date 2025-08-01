@@ -34,7 +34,9 @@
     themeToggleDarkIcon: HTMLElement
   ) {
     const isAppearanceTransition =
-      document.startViewTransition() &&
+      // 检查浏览器是否支持 View Transition API
+      document.startViewTransition &&
+      typeof document.startViewTransition === 'function' &&
       !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const theme_before =
       localStorage.getItem('color-theme') ||

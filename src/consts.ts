@@ -2,7 +2,7 @@
 // You can import this data from anywhere in your site by using the `import` keyword.
 
 export const SITE_TITLE = "Nick's Blog";
-export const SITE_URL = "https://nickchen.top"
+export const SITE_URL = "https://nickchen.top";
 export const SITE_DESCRIPTION = '天王寺科技强力驱动~';
 export const AUTHOR_LINK = 'https://github.com/nick-cjyx9';
 export const AUTHOR_AVATAR = 'https://i0.hdslb.com/bfs/face/a6b5f3284f6cac1bf4264451f6e871b61db24d19.jpg'

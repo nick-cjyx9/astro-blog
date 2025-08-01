@@ -1,0 +1,197 @@
+---
+import { AUTHOR_NAME } from '../consts';
+
+const aboutInfo = {
+  name: AUTHOR_NAME,
+  role: "全栈开发者",
+  location: "中国",
+  email: "contact@nickblog.com", // 替换为你的邮箱
+  interests: ["Web开发", "开源项目", "技术写作", "二次元"],
+  currentStatus: "专注于 Astro 和现代前端技术",
+  experience: "3+ 年开发经验",
+  languages: ["JavaScript", "TypeScript", "Python"],
+  socialLinks: [
+    {
+      name: "GitHub",
+      url: "https://github.com/nick-cjyx9",
+      icon: "github"
+    },
+    {
+      name: "Email",
+      url: "mailto:contact@nickblog.com",
+      icon: "email"
+    },
+    {
+      name: "RSS",
+      url: "/rss.xml",
+      icon: "rss"
+    }
+  ]
+};
+---
+
+<section class="w-full py-16">
+  <div class="mb-12 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+      关于我
+    </h2>
+    <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+      了解更多关于我的技术背景和个人信息
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- 个人信息卡片 -->
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-8 dark:bg-gray-800 dark:border-gray-700">
+      <div class="flex items-center mb-6">
+        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mr-4">
+          {aboutInfo.name.charAt(0)}
+        </div>
+        <div>
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
+            {aboutInfo.name}
+          </h3>
+          <p class="text-blue-600 dark:text-blue-400 font-medium">
+            {aboutInfo.role}
+          </p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div class="flex items-center text-gray-600 dark:text-gray-300">
+          <svg class="w-5 h-5 mr-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+          </svg>
+          {aboutInfo.location}
+        </div>
+
+        <div class="flex items-center text-gray-600 dark:text-gray-300">
+          <svg class="w-5 h-5 mr-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+          </svg>
+          {aboutInfo.email}
+        </div>
+
+        <div class="flex items-center text-gray-600 dark:text-gray-300">
+          <svg class="w-5 h-5 mr-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+          </svg>
+          {aboutInfo.experience}
+        </div>
+      </div>
+
+      <!-- 当前状态 -->
+      <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-500">
+        <div class="flex items-center">
+          <div class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+          <span class="text-sm font-medium text-blue-800 dark:text-blue-200">当前状态</span>
+        </div>
+        <p class="text-sm text-blue-700 dark:text-blue-300 mt-1">
+          {aboutInfo.currentStatus}
+        </p>
+      </div>
+    </div>
+
+    <!-- 兴趣爱好和技能 -->
+    <div class="space-y-6">
+      <!-- 兴趣爱好 -->
+      <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 dark:bg-gray-800 dark:border-gray-700">
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+          <svg class="w-5 h-5 mr-2 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+          </svg>
+          兴趣爱好
+        </h4>
+        <div class="flex flex-wrap gap-2">
+          {aboutInfo.interests.map((interest) => (
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-200 dark:text-purple-800">
+              {interest}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <!-- 主要语言 -->
+      <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 dark:bg-gray-800 dark:border-gray-700">
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+          <svg class="w-5 h-5 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+          主要语言
+        </h4>
+        <div class="space-y-2">
+          {aboutInfo.languages.map((language) => (
+            <div class="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+              <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                {language}
+              </span>
+              <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- 社交链接 -->
+      <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 dark:bg-gray-800 dark:border-gray-700">
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+          <svg class="w-5 h-5 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm5.707 4.293a1 1 0 00-1.414 1.414L10 11.414l1.707-1.707a1 1 0 00-1.414-1.414L10 8.586 9.293 7.879z" clip-rule="evenodd"></path>
+          </svg>
+          联系方式
+        </h4>
+        <div class="flex space-x-4">
+          {aboutInfo.socialLinks.map((link) => (
+            <a 
+              href={link.url}
+              target={link.name !== "Email" ? "_blank" : undefined}
+              rel={link.name !== "Email" ? "noopener noreferrer" : undefined}
+              class="group flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-full transition-colors duration-200"
+              title={link.name}
+            >
+              {link.icon === "github" && (
+                <svg class="w-5 h-5 text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clip-rule="evenodd"></path>
+                </svg>
+              )}
+              {link.icon === "email" && (
+                <svg class="w-5 h-5 text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                </svg>
+              )}
+              {link.icon === "rss" && (
+                <svg class="w-5 h-5 text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M5 3a1 1 0 000 2c5.523 0 10 4.477 10 10a1 1 0 102 0C17 8.373 11.627 3 5 3z"></path>
+                  <path d="M4 9a1 1 0 011-1 7 7 0 017 7 1 1 0 11-2 0A5 5 0 005 10a1 1 0 01-1-1zM3 15a2 2 0 114 0 2 2 0 01-4 0z"></path>
+                </svg>
+              )}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 统计信息 -->
+  <div class="mt-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-8 text-white">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div>
+        <div class="text-3xl font-bold mb-2">50+</div>
+        <div class="text-blue-100">项目经验</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold mb-2">3+</div>
+        <div class="text-blue-100">年开发经验</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold mb-2">10+</div>
+        <div class="text-blue-100">技术文章</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold mb-2">∞</div>
+        <div class="text-blue-100">学习热情</div>
+      </div>
+    </div>
+  </div>
+</section>

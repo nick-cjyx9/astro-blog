@@ -1,9 +1,66 @@
 ---
 import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import LatestPosts from "../components/LatestPosts.astro";
+import Projects from "../components/Projects.astro";
+import Skills from "../components/Skills.astro";
+import AboutCard from "../components/AboutCard.astro";
+import FeaturedFriends from "../components/FeaturedFriends.astro";
+import BlogStats from "../components/BlogStats.astro";
 ---
 
-<Base title="index">
-  <h1>Hello World</h1>
-  <h2>本网站正在升级施工中！</h2>
+<Base 
+  title="首页" 
+  description="欢迎来到 Nick's Blog，这里分享技术文章、Astro框架开发经验以及二次元相关内容"
+  type="website"
+>
+  <!-- Hero Section -->
+  <div class="relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Hero />
+    </div>
+  </div>
+
+  <!-- About Card Section -->
+  <div class="border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <AboutCard />
+    </div>
+  </div>
+
+  <!-- Skills Section -->
+  <div class="border-t border-gray-200 dark:border-gray-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Skills />
+    </div>
+  </div>
+
+  <!-- Latest Posts Section -->
+  <div class="border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <LatestPosts />
+    </div>
+  </div>
+
+  <!-- Projects Section -->
+  <div class="border-t border-gray-200 dark:border-gray-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Projects />
+    </div>
+  </div>
+
+  <!-- Featured Friends Section -->
+  <div class="border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <FeaturedFriends />
+    </div>
+  </div>
+
+  <!-- Blog Stats Section -->
+  <div class="border-t border-gray-200 dark:border-gray-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <BlogStats />
+    </div>
+  </div>
 </Base>
 

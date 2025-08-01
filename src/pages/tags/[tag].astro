@@ -15,7 +15,11 @@ const { tag } = Astro.params;
 const postsByTag = posts.filter((post) => post.data.tags?.includes(tag));
 ---
 
-<Base title={tag}>
+<Base 
+  title={`标签: ${tag}`}
+  description={`查看所有标记为 "${tag}" 的文章，共 ${postsByTag.length} 篇`}
+  type="website"
+>
   <h1>{tag}</h1>
   <ul>
     {
