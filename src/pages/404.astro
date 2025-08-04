@@ -7,7 +7,7 @@ import Base from '../layouts/Base.astro';
     <h1 class="text-6xl font-bold text-gray-900 dark:text-white mb-4">404</h1>
     <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-4">页面未找到</h2>
     <p class="text-gray-600 dark:text-gray-400 mb-8">
-      抱歉，您访问的页面不存在。可能是链接错误或页面已被移动。
+      抱歉，您访问的页面不存在~
     </p>
     <div class="space-x-4">
       <a 
@@ -25,18 +25,3 @@ import Base from '../layouts/Base.astro';
     </div>
   </div>
 </Base>
-
-<script>
-  // 添加搜索功能
-  const searchInput = document.getElementById('search');
-  if (searchInput) {
-    searchInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        const query = (e.target as HTMLInputElement).value;
-        if (query.trim()) {
-          window.location.href = `/search?q=${encodeURIComponent(query)}`;
-        }
-      }
-    });
-  }
-</script>

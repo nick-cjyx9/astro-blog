@@ -30,35 +30,22 @@ const friends = await getCollection("friend");
     </div>
 
     <!-- 友链列表 -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
       {friends.map((friend) => (
         <FriendCard friend={friend.data} />
       ))}
-    </div>
-
-    <!-- 申请友链提示 -->
-    <div class="mt-16 text-center">
-      <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-8 text-white">
-        <h2 class="text-2xl font-bold mb-4">想要申请友链？</h2>
-        <p class="text-blue-100 mb-6">
-          如果你也有优质的博客或网站，欢迎与我交换友链！
-        </p>
-        <div class="space-y-2 text-sm text-blue-100 mb-6">
-          <p>• 网站内容积极向上，无违法违规内容</p>
-          <p>• 网站能够正常访问，更新频率较为稳定</p>
-          <p>• 优先考虑技术、学习、生活等主题的博客</p>
-        </div>
-        <a 
-          href="mailto:contact@nickblog.com" 
-          class="inline-flex items-center px-6 py-3 bg-white text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition-colors"
-        >
-          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+      
+      <!-- 申请友链卡片 -->
+      <a 
+        href="mailto:contact@nickblog.com"
+        class="group flex flex-col items-center justify-center p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 dark:bg-gray-800 dark:border-gray-700 hover:scale-105 min-h-[120px]"
+        style="border-top: 4px solid #3b82f6"
+      >
+        <div class="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-3">
+          <svg class="w-7 h-7 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path>
           </svg>
-          联系申请友链
-        </a>
-      </div>
+        </div>
+      </a>
     </div>
-  </div>
 </Base>

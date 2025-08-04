@@ -5,6 +5,7 @@ pubDate: 2025-01-15
 lastModified: 2025-01-20
 author: "Nick Chen"
 tags: ["Astro", "JavaScript", "静态站点", "前端框架", "性能优化"]
+heroImage: ./coverImages/snipaste_2025-01-26_22-20-28.png
 ---
 
 Astro 是一个现代的静态站点生成器，专为构建快速、以内容为中心的网站而设计。本文将带你深入了解 Astro 的核心概念和最佳实践。

@@ -28,4 +28,15 @@ const friend = defineCollection({
   }),
 })
 
-export const collections = { blog, friend }
+const project = defineCollection({
+  loader: glob({ base: './src/content/project', pattern: '**/*.{md,mdx}' }),
+  schema: () => z.object({
+    title: z.string(),
+    description: z.string(),
+    tech: z.array(z.string()),
+    link: z.string(),
+    status: z.enum(['正在开发', '计划中', '筹备中', '已完成', '已暂停']),
+  }),
+})
+
+export const collections = { blog, friend, project }

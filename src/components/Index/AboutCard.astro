@@ -1,14 +1,14 @@
 ---
-import { AUTHOR_NAME } from '../consts';
+import { AUTHOR_NAME } from '../../consts';
 
 const aboutInfo = {
   name: AUTHOR_NAME,
-  role: "全栈开发者",
-  location: "中国",
-  email: "contact@nickblog.com", // 替换为你的邮箱
-  interests: ["Web开发", "开源项目", "技术写作", "二次元"],
-  currentStatus: "专注于 Astro 和现代前端技术",
-  experience: "3+ 年开发经验",
+  role: "学生 / 前端热爱者",
+  location: "江苏 / 四川",
+  email: "i@nickchen.top",
+  interests: ["Web", "开源", "文学", "二次元"],
+  currentStatus: "CTF WEB 方向学习中！",
+  experience: "",
   languages: ["JavaScript", "TypeScript", "Python"],
   socialLinks: [
     {
@@ -18,13 +18,8 @@ const aboutInfo = {
     },
     {
       name: "Email",
-      url: "mailto:contact@nickblog.com",
+      url: "mailto:i@nickchen.top",
       icon: "email"
-    },
-    {
-      name: "RSS",
-      url: "/rss.xml",
-      icon: "rss"
     }
   ]
 };
@@ -71,13 +66,6 @@ const aboutInfo = {
             <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
           </svg>
           {aboutInfo.email}
-        </div>
-
-        <div class="flex items-center text-gray-600 dark:text-gray-300">
-          <svg class="w-5 h-5 mr-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
-          </svg>
-          {aboutInfo.experience}
         </div>
       </div>
 
@@ -160,12 +148,6 @@ const aboutInfo = {
                   <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
                 </svg>
               )}
-              {link.icon === "rss" && (
-                <svg class="w-5 h-5 text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M5 3a1 1 0 000 2c5.523 0 10 4.477 10 10a1 1 0 102 0C17 8.373 11.627 3 5 3z"></path>
-                  <path d="M4 9a1 1 0 011-1 7 7 0 017 7 1 1 0 11-2 0A5 5 0 005 10a1 1 0 01-1-1zM3 15a2 2 0 114 0 2 2 0 01-4 0z"></path>
-                </svg>
-              )}
             </a>
           ))}
         </div>
@@ -173,25 +155,4 @@ const aboutInfo = {
     </div>
   </div>
 
-  <!-- 统计信息 -->
-  <div class="mt-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-8 text-white">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-      <div>
-        <div class="text-3xl font-bold mb-2">50+</div>
-        <div class="text-blue-100">项目经验</div>
-      </div>
-      <div>
-        <div class="text-3xl font-bold mb-2">3+</div>
-        <div class="text-blue-100">年开发经验</div>
-      </div>
-      <div>
-        <div class="text-3xl font-bold mb-2">10+</div>
-        <div class="text-blue-100">技术文章</div>
-      </div>
-      <div>
-        <div class="text-3xl font-bold mb-2">∞</div>
-        <div class="text-blue-100">学习热情</div>
-      </div>
-    </div>
-  </div>
 </section>

@@ -1,12 +1,10 @@
 ---
 import Base from "../layouts/Base.astro";
-import Hero from "../components/Hero.astro";
-import LatestPosts from "../components/LatestPosts.astro";
-import Projects from "../components/Projects.astro";
-import Skills from "../components/Skills.astro";
-import AboutCard from "../components/AboutCard.astro";
-import FeaturedFriends from "../components/FeaturedFriends.astro";
-import BlogStats from "../components/BlogStats.astro";
+import Hero from "../components/Index/Hero.astro";
+import LatestPosts from "../components/Index/LatestPosts.astro";
+import Projects from "../components/Index/Projects.astro";
+import AboutCard from "../components/Index/AboutCard.astro";
+import BlogStats from "../components/Index/BlogStats.astro";
 ---
 
 <Base 
@@ -21,20 +19,6 @@ import BlogStats from "../components/BlogStats.astro";
     </div>
   </div>
 
-  <!-- About Card Section -->
-  <div class="border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <AboutCard />
-    </div>
-  </div>
-
-  <!-- Skills Section -->
-  <div class="border-t border-gray-200 dark:border-gray-700">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <Skills />
-    </div>
-  </div>
-
   <!-- Latest Posts Section -->
   <div class="border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,17 +26,18 @@ import BlogStats from "../components/BlogStats.astro";
     </div>
   </div>
 
+  <!-- About Card Section -->
+  <div class="border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <AboutCard />
+    </div>
+  </div>
+
+
   <!-- Projects Section -->
   <div class="border-t border-gray-200 dark:border-gray-700">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <Projects />
-    </div>
-  </div>
-
-  <!-- Featured Friends Section -->
-  <div class="border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <FeaturedFriends />
     </div>
   </div>
 
