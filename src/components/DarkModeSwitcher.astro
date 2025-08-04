@@ -28,7 +28,7 @@
    * Credit to [@hooray](https://github.com/hooray)
    * @see https://github.com/vuejs/vitepress/pull/2347
    */
-  export function toggleTheme(
+  function toggleTheme(
     event: MouseEvent,
     themeToggleLightIcon: HTMLElement,
     themeToggleDarkIcon: HTMLElement
@@ -83,23 +83,32 @@
       );
     });
   }
-
-  let themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-  let themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
-  let themeToggleBtn = document.getElementById('theme-toggle');
-  if (themeToggleDarkIcon && themeToggleLightIcon && themeToggleBtn) {
-    // Change the icons inside the button based on previous settings
-    if (
-      localStorage.getItem('color-theme') === 'dark' ||
-      (!('color-theme' in localStorage) &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
+  function initThemeToggle() {
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    
+    if (!themeToggleDarkIcon || !themeToggleLightIcon || !themeToggleBtn) {
+      return;
+    }
+    const isDark = localStorage.getItem('color-theme') === 'dark' ||
+      (!localStorage.getItem('color-theme') && 
+       window.matchMedia('(prefers-color-scheme: dark)').matches);
+    
+    if (isDark) {
       themeToggleLightIcon.classList.remove('hidden');
+      themeToggleDarkIcon.classList.add('hidden');
     } else {
       themeToggleDarkIcon.classList.remove('hidden');
+      themeToggleLightIcon.classList.add('hidden');
     }
     themeToggleBtn.addEventListener('click', (e) => {
       toggleTheme(e, themeToggleLightIcon, themeToggleDarkIcon);
     });
+  }
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(initThemeToggle);
+  } else {
+    setTimeout(initThemeToggle, 0);
   }
 </script>
