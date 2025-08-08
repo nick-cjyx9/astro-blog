@@ -5,6 +5,7 @@ import pagefind from 'astro-pagefind'
 
 // @ts-check
 import { defineConfig } from 'astro/config'
+// import remarkModifiedTime from './src/utils/remark/remark-modified-time.mjs'
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,6 +16,7 @@ export default defineConfig({
   },
 
   integrations: [pagefind(), sitemap()],
+  prefetch: true,
   adapter: cloudflare(),
   output: 'static',
   imageService: 'compile',
@@ -24,6 +26,7 @@ export default defineConfig({
   },
 
   markdown: {
+    // remarkPlugins: [remarkModifiedTime],
     shikiConfig: {
       themes: {
         light: 'github-light',

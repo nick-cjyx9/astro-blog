@@ -1,38 +1,39 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PostItem from '../../components/PostItem.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import { PAGE_SIZE } from '../../consts';
 
-const posts = await getCollection('blog');
-const sorted_posts = posts.sort((a, b) => {
-  return new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime();
-});
+// 与 Astro 文档一致的分页对象类型
+// 参见 https://docs.astro.build/zh-cn/core-concepts/routing/#%E5%88%86%E9%A1%B5
 
-// 获取一些统计信息
-const totalPosts = sorted_posts.length;
-const allTags = sorted_posts.flatMap((post) => post.data.tags || []).filter(Boolean);
-const uniqueTags = [...new Set(allTags)];
+export const getStaticPaths = async ({ paginate }: { paginate: any }) => {
+  const posts = await getCollection('blog');
+  const sorted_posts = posts.sort((a, b) => {
+    return new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime();
+  });
 
-const last = Math.max(1, Math.ceil(totalPosts / PAGE_SIZE));
-const page = {
-  data: sorted_posts.slice(0, PAGE_SIZE),
-  url: {
-    prev: undefined,
-    next: last > 1 ? '/blog/2/' : undefined,
-  },
-  total: totalPosts,
-  current: 1,
-  size: PAGE_SIZE,
-  last,
-  start: 1,
-  end: Math.min(PAGE_SIZE, totalPosts),
+  const totalPosts = sorted_posts.length;
+  const allTags = sorted_posts.flatMap((post) => post.data.tags || []).filter(Boolean);
+  const uniqueTags = [...new Set(allTags)];
+
+  return paginate(sorted_posts, {
+    pageSize: PAGE_SIZE,
+    props: { totalPosts, uniqueTags },
+  });
+};
+
+const { page, totalPosts, uniqueTags } = Astro.props as {
+  page: any;
+  // TODO: 这里的类型可以更具体
+  totalPosts: number;
+  uniqueTags: string[];
 };
 ---
 
 <Base
-  title="全部文章"
-  description={`浏览 Nick's Blog 的所有文章，共 ${totalPosts} 篇。`}
+  title={`全部文章${page.current > 1 ? ` - 第 ${page.current} 页` : ''}`}
+  description={`浏览 Nick's Blog 的所有文章，共 ${totalPosts} 篇。${page.current > 1 ? `当前第 ${page.current}/${page.last} 页。` : ''}`}
   type="website"
 >
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -89,18 +90,28 @@ const page = {
         </div>
       </div>
     </div>
-
     <div class="space-y-8">
+      {/* @ts-ignore */}
       {page.data.map((post) => <PostItem post={post} />)}
     </div>
     {
       totalPosts > 0 && (
         <nav class="mt-12 flex justify-center" aria-label="分页导航">
           <ul class="inline-flex items-center gap-2">
-            {Array.from({ length: page.last }).map((_, i) => {
+            {page.url.prev && (
+              <li>
+                <a
+                  href={page.url.prev}
+                  class="px-3 py-2 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+                >
+                  上一页
+                </a>
+              </li>
+            )}
+            {Array.from({ length: Math.ceil(totalPosts / PAGE_SIZE) }).map((_, i) => {
               const n = i + 1;
               const href = n === 1 ? '/blog/' : `/blog/${n}/`;
-              const isActive = n === page.current;
+              const isActive = n === page.currentPage;
               return (
                 <li>
                   <a
@@ -113,6 +124,7 @@ const page = {
                 </li>
               );
             })}
+
             {page.url.next && (
               <li>
                 <a

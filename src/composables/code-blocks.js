@@ -1,13 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // 添加语言指示器和复制按钮
   const codeBlocks = document.querySelectorAll('pre.astro-code')
   codeBlocks.forEach((pre) => {
     const wrapper = document.createElement('div')
     wrapper.className = 'code-block-wrapper'
     pre.parentNode?.insertBefore(wrapper, pre)
     wrapper.appendChild(pre)
-    const langMatch = pre.className.match(/language-(\w+)/)
-    const language = langMatch ? langMatch[1] : 'text'
+    const language = pre.getAttribute('data-language')
     const toolbar = document.createElement('div')
     toolbar.className = 'code-toolbar'
     const langIndicator = document.createElement('span')
@@ -60,10 +58,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     wrapper.insertBefore(toolbar, pre)
   })
-})
-
-// 主题切换时更新代码块主题
-document.addEventListener('astro:page-load', () => {
-  const event = new Event('DOMContentLoaded')
-  document.dispatchEvent(event)
 })
