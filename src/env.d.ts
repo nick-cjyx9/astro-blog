@@ -1,9 +1,3 @@
-type Runtime = import('@astrojs/cloudflare').Runtime<Env>;
-
-declare namespace App {
-  interface Locals extends Runtime {}
-}
-
 interface ImportMetaEnv {
   readonly GITHUB_CLIENT_ID: string;
   readonly GITHUB_CLIENT_SECRET: string;
@@ -14,6 +8,12 @@ interface ImportMetaEnv {
   readonly RESEND_EMAIL_FROM: string;
   readonly RESEND_EMAIL_TO: string;
 }
+
+declare namespace App {
+  interface Locals extends Runtime {}
+}
+
+type Runtime = import('@astrojs/cloudflare').Runtime<ImportMetaEnv>;
 
 interface ImportMeta {
   readonly env: ImportMetaEnv;

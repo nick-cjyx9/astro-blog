@@ -2,8 +2,10 @@ import { type APIRoute } from "astro";
 
 export const prerender = false;
 
-export const ALL: APIRoute = async ({ request, cookies }) => {
-    const client_id = import.meta.env.GITHUB_CLIENT_ID;
+
+export const ALL: APIRoute = async ({ request, cookies, locals }) => {
+    const ENV = locals.runtime.env || import.meta.env;
+    const client_id = ENV.GITHUB_CLIENT_ID;
     try {
         const url = new URL(request.url);
         const state = crypto.getRandomValues(new Uint8Array(12)).join('')
@@ -13,7 +15,7 @@ export const ALL: APIRoute = async ({ request, cookies }) => {
             path: '/',
             httpOnly: true,
             sameSite: 'lax',
-            secure: import.meta.env.PROD,
+            secure: ENV.PROD,
             maxAge: 60 * 10 // 10 分钟
         });
 

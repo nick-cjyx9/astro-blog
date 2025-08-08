@@ -1,7 +1,6 @@
 import { defineAction, ActionError } from "astro:actions";
 import { z } from 'astro:schema';
 import { Resend } from 'resend';
-const resend = new Resend(import.meta.env.RESEND_API_KEY);
 
 function buildEmail(params: {
   title: string;
@@ -85,13 +84,14 @@ export const server = {
       avatar: z.union([z.string().url(), z.literal('')]),
       mail: z.union([z.string().email().optional(), z.literal('')]),
     }),
-    handler: async (input) => {
+    handler: async (input, ctx) => {
       const { title, link, description, avatar, mail } = input;
-
+      const ENV = ctx.locals.runtime.env || import.meta.env;
+      const resend = new Resend(ENV.RESEND_API_KEY);
       try {
         const payload: any = {
-          from: import.meta.env.RESEND_EMAIL_FROM,
-          to: [import.meta.env.RESEND_EMAIL_TO],
+          from: ENV.RESEND_EMAIL_FROM,
+          to: [ENV.RESEND_EMAIL_TO],
           subject: `${title} - New Friend Link Request`,
           html: buildEmail({ title, link, description, avatar, mail }),
         };

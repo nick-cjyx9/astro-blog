@@ -21,9 +21,10 @@ function renderBody(status: string, content: any) {
   return blob;
 }
 
-export const ALL: APIRoute = async ({ request, cookies }) => {
-  const client_id = import.meta.env.GITHUB_CLIENT_ID;
-  const client_secret = import.meta.env.GITHUB_CLIENT_SECRET;
+export const ALL: APIRoute = async ({ request, cookies, locals }) => {
+  const ENV = locals.runtime.env || import.meta.env;
+  const client_id = ENV.GITHUB_CLIENT_ID;
+  const client_secret = ENV.GITHUB_CLIENT_SECRET;
   try {
     const url = new URL(request.url);
     const server_state = url.searchParams.get('state');
@@ -51,7 +52,7 @@ export const ALL: APIRoute = async ({ request, cookies }) => {
         body: JSON.stringify({ client_id, client_secret, code }),
       },
     );
-    const result = await response.json();
+    const result:any = await response.json();
     if (result.error) {
       console.error(result.error);
       return new Response(renderBody('error', result), {
