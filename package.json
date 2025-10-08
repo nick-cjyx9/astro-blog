@@ -1,0 +1,47 @@
+{
+  "name": "astro-blog",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "npx astro build && npx wrangler dev",
+    "astro": "astro",
+    "publish": "npx astro build && npx wrangler deploy",
+    "format": "biome check --write",
+    "lint": "biome lint"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^12.6.8",
+    "@astrojs/mdx": "^4.3.5",
+    "@astrojs/rss": "^4.0.12",
+    "@astrojs/sitemap": "^3.5.1",
+    "@astrojs/vue": "^5.1.1",
+    "@iconify/tailwind": "^1.2.0",
+    "@libsql/client": "^0.15.15",
+    "@pagefind/default-ui": "^1.4.0",
+    "@tailwindcss/vite": "^4.1.13",
+    "@types/node": "^24.5.0",
+    "astro": "^5.13.7",
+    "astro-pagefind": "^1.8.5",
+    "dayjs": "^1.11.18",
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.44.6",
+    "flowbite": "^3.1.2",
+    "mdast-util-to-string": "^4.0.0",
+    "reading-time": "^1.5.0",
+    "resend": "^6.1.0",
+    "sharp": "^0.34.3",
+    "tailwindcss": "^4.1.13",
+    "vue": "^3.5.22"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.2.4",
+    "@iconify/json": "^2.2.385",
+    "@iconify/tailwind4": "^1.0.6",
+    "drizzle-kit": "^0.31.5",
+    "lefthook": "^1.13.1",
+    "tsx": "^4.20.6",
+    "wrangler": "^4.37.1"
+  }
+}

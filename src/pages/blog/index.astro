@@ -1,0 +1,125 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostItem from '../../components/PostItem.astro';
+import { getCollection } from 'astro:content';
+import { PAGE_SIZE } from '../../consts';
+
+const posts = await getCollection('blog');
+const sorted_posts = posts.sort((a, b) => {
+  return new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime();
+});
+
+// 获取一些统计信息
+const totalPosts = sorted_posts.length;
+const allTags = sorted_posts.flatMap((post) => post.data.tags || []).filter(Boolean);
+const uniqueTags = [...new Set(allTags)];
+
+const last = Math.max(1, Math.ceil(totalPosts / PAGE_SIZE));
+const page = {
+  data: sorted_posts.slice(0, PAGE_SIZE),
+  url: {
+    prev: undefined,
+    next: last > 1 ? '/blog/2/' : undefined,
+  },
+  total: totalPosts,
+  current: 1,
+  size: PAGE_SIZE,
+  last,
+  start: 1,
+  end: Math.min(PAGE_SIZE, totalPosts),
+};
+---
+
+<Base
+  title="全部文章"
+  description={`浏览 Nick's Blog 的所有文章，共 ${totalPosts} 篇。`}
+  type="website"
+  pagefind={{ filters: { 类型: '文章列表' } }}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- 页面标题和统计 -->
+        <div class="text-center mb-12">
+      <h1
+        class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-8 tracking-tight"
+      >
+        全部文章
+      </h1>
+
+      <!-- 统计信息 -->
+      <div class="flex flex-wrap justify-center gap-6 mb-8">
+        <div
+          class="flex items-center px-4 py-2 bg-blue-50 dark:bg-blue-900/20 rounded-full"
+        >
+          <span
+            class="icon-[hugeicons--google-doc] w-5 h-5 text-blue-600 dark:text-blue-400 mr-2"
+          ></span>
+          <span class="text-blue-600 dark:text-blue-400 font-medium">
+            {totalPosts} 篇文章
+          </span>
+        </div>
+
+        <div
+          class="flex items-center px-4 py-2 bg-green-50 dark:bg-green-900/20 rounded-full"
+        >
+          <span
+            class="icon-[tabler--tag-filled] w-5 h-5 text-green-600 dark:text-green-400 mr-2"
+          ></span>
+
+          <span class="text-green-600 dark:text-green-400 font-medium">
+            {uniqueTags.length} 个标签
+          </span>
+        </div>
+
+        <div
+          class="flex items-center px-4 py-2 bg-purple-50 dark:bg-purple-900/20 rounded-full"
+        >
+          <span
+            class="icon-[mingcute--time-fill] w-5 h-5 text-purple-600 dark:text-purple-400 mr-2"
+          ></span>
+
+          <span class="text-purple-600 dark:text-purple-400 font-medium">
+            最新更新
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-8">
+      {page.data.map((post) => <PostItem post={post} />)}
+    </div>
+    {
+      totalPosts > 0 && (
+        <nav class="mt-12 flex justify-center" aria-label="分页导航">
+          <ul class="inline-flex items-center gap-2">
+            {Array.from({ length: page.last }).map((_, i) => {
+              const n = i + 1;
+              const href = n === 1 ? '/blog/' : `/blog/${n}/`;
+              const isActive = n === page.current;
+              return (
+                <li>
+                  <a
+                    href={href}
+                    aria-current={isActive ? 'page' : undefined}
+                    class={`px-3 py-2 rounded-md ${isActive ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700'}`}
+                  >
+                    {n}
+                  </a>
+                </li>
+              );
+            })}
+            {page.url.next && (
+              <li>
+                <a
+                  href={page.url.next}
+                  class="px-3 py-2 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+                >
+                  下一页
+                </a>
+              </li>
+            )}
+          </ul>
+        </nav>
+      )
+    }
+  </div>
+</Base>

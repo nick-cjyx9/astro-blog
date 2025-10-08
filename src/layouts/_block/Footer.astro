@@ -1,0 +1,32 @@
+---
+import {
+  AUTHOR_LINK,
+  AUTHOR_NAME,
+  STARTED_AT,
+} from '../../consts';
+const start = new Date(STARTED_AT).getFullYear();
+const end = new Date().getFullYear();
+---
+
+<footer class="bg-white dark:bg-gray-900 px-2 md:px-6 lg:px-8">
+  <div class="mx-auto w-full px-2 py-6 lg:py-8">
+    <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+    <div class="flex flex-nowrap">
+      <span class="text-nowrap text-gray-500 dark:text-gray-400 text-sm"> 
+        © {start === end ? start : `${start}-${end}`}
+        <a href={AUTHOR_LINK} class="hover:underline">{AUTHOR_NAME}</a>.
+      </span>
+      <div class="w-full"></div>
+      <div class="flex items-center">
+        <a href={AUTHOR_LINK} class="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5">
+          <span class="w-4 h-4 scale-125 icon-[mdi--github]"></span>
+          <span class="sr-only">GitHub account</span>
+        </a>
+        <a href="/rss.xml" class="text-gray-500 hover:text-gray-900 dark:hover:text-white ms-5">
+          <span class="w-4 h-4 scale-125 icon-[mdi--rss]"></span>
+          <span class="sr-only">RSS feed</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

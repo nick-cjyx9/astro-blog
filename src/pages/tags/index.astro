@@ -1,0 +1,81 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { SITE_TITLE } from '../../consts';
+
+const posts = await getCollection('blog');
+const tags: Record<string, number> = {};
+
+posts.forEach(({ data: { tags: postTags } }) => {
+  postTags?.forEach((tag) => {
+    tags[tag] = (tags[tag] || 0) + 1;
+  });
+});
+
+// 按照文章数量排序，然后按名称排序
+const sortedTags = Object.entries(tags).sort(([a, countA], [b, countB]) => {
+  if (countB !== countA) return countB - countA; // 按数量降序
+  return a.localeCompare(b); // 按名称升序
+});
+
+// 获取最大和最小文章数，用于计算标签大小
+const counts = Object.values(tags);
+const maxCount = Math.max(...counts);
+const minCount = Math.min(...counts);
+---
+
+<Base
+  title="标签"
+  description={`浏览 ${SITE_TITLE} 的所有标签，共 ${sortedTags.length} 个分类标签`}
+  type="website"
+  pagefind={{ filters: { 类型: '标签页' } }}
+>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- 页面标题 -->
+    <div class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-4 tracking-tight">标签分类</h1>
+      <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-6">
+        探索不同主题的文章内容，通过标签快速找到你感兴趣的话题
+      </p>
+      <div
+        class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-full border border-blue-100 dark:border-blue-800"
+      >
+  <span class="icon-[ph--tag] w-5 h-5 text-blue-600 dark:text-blue-400 mr-3"></span>
+        <span class="text-blue-700 dark:text-blue-300 font-semibold">
+          共 {sortedTags.length} 个标签，覆盖 {posts.length} 篇文章
+        </span>
+      </div>
+    </div>
+
+    <div
+      class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-2xl p-8 border border-gray-200 dark:border-gray-700"
+    >
+      <div class="flex flex-wrap justify-center items-center gap-4">
+        {
+          sortedTags.map(([tag, count]) => {
+            // 计算标签大小 (更平滑的缩放)
+            const ratio = maxCount > minCount ? (count - minCount) / (maxCount - minCount) : 0;
+            const fontSize = 0.875 + ratio * 0.75; // 0.875rem 到 1.625rem
+            const padding = ratio > 0.7 ? 'px-4 py-2' : ratio > 0.4 ? 'px-3 py-2' : 'px-3 py-1.5';
+
+            return (
+              <a
+                href={`/tags/${tag}`}
+                class={`group inline-flex items-center ${padding} bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-full transition-all duration-300 dark:bg-gray-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:border-blue-400 transform hover:scale-105 hover:shadow-md`}
+                style={`font-size: ${fontSize}rem`}
+              >
+                <span class="text-gray-700 group-hover:text-blue-700 dark:text-gray-300 dark:group-hover:text-blue-300 font-medium transition-colors">
+                  #{tag}
+                </span>
+                <span class="ml-2 text-xs text-gray-400 group-hover:text-blue-500 dark:text-gray-500 dark:group-hover:text-blue-400 transition-colors">
+                  {count}
+                </span>
+              </a>
+            );
+          })
+        }
+      </div>
+    </div>
+
+  </div>
+</Base>

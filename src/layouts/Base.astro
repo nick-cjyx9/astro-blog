@@ -1,0 +1,219 @@
+---
+import Footer from './_block/Footer.astro';
+import NavBar from './_block/NavBar.astro';
+import '../styles/global.css';
+
+import {
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+  AUTHOR_LINK,
+  AUTHOR_NAME,
+  SITE_KEYWORDS,
+  SITE_URL,
+} from '../consts';
+import openGraphImage from '/public/og.png';
+
+type PagefindValue = string | string[] | undefined | null;
+interface PagefindConfig {
+  exclude?: boolean;
+  filters?: Record<string, PagefindValue>;
+  meta?: Record<string, PagefindValue>;
+}
+
+interface Props {
+  type?: string;
+  title: string;
+  description?: string;
+  pubDate?: string | Date;
+  tags?: string[];
+  image?: string;
+  author?: string;
+  pagefind?: PagefindConfig;
+}
+
+const {
+  type = 'website',
+  title,
+  pubDate,
+  tags,
+  pagefind: incomingPagefind,
+} = Astro.props as Props;
+const pageDescription = SITE_DESCRIPTION;
+const pageImage = openGraphImage.src;
+const pageAuthor = AUTHOR_NAME;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": type === 'article' ? "BlogPosting" : "WebSite",
+  "headline": title,
+  "description": pageDescription,
+  "image": pageImage,
+  "url": Astro.url.href,
+  "author": {
+    "@type": "Person",
+    "name": pageAuthor,
+    "url": AUTHOR_LINK
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": SITE_TITLE,
+    "url": SITE_URL
+  },
+  ...(type === 'article' && pubDate && {
+    "datePublished": new Date(pubDate).toISOString(),
+    "dateModified": new Date(pubDate).toISOString(),
+  }),
+  ...(tags && {
+    "keywords": tags.join(', ')
+  })
+};
+
+const excludeFromSearch = incomingPagefind?.exclude ?? false;
+
+const normalizeValues = (value: PagefindValue): string[] => {
+  if (value === null || value === undefined) return [];
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => (typeof item === 'string' ? item.trim() : `${item}`.trim()))
+      .filter((item) => item.length > 0);
+  }
+  return [`${value}`.trim()].filter((item) => item.length > 0);
+};
+
+const pushToMap = (map: Map<string, Set<string>>, key: string, value: PagefindValue) => {
+  if (!key) return;
+  const normalized = normalizeValues(value);
+  if (!normalized.length) return;
+  if (!map.has(key)) {
+    map.set(key, new Set());
+  }
+  const bucket = map.get(key)!;
+  normalized.forEach((entry) => bucket.add(entry));
+};
+
+const filterMap = new Map<string, Set<string>>();
+const metaMap = new Map<string, Set<string>>();
+
+const defaultType = type === 'article' ? '文章' : '页面';
+if (!excludeFromSearch && defaultType) {
+  pushToMap(filterMap, '类型', defaultType);
+}
+
+if (!excludeFromSearch && incomingPagefind) {
+  if (incomingPagefind.filters) {
+    for (const [key, value] of Object.entries(incomingPagefind.filters)) {
+      if (key === '类型' && filterMap.has('类型')) {
+        // Override default type values when explicitly provided
+        filterMap.set('类型', new Set());
+      }
+      pushToMap(filterMap, key, value);
+    }
+  }
+
+  if (incomingPagefind.meta) {
+    for (const [key, value] of Object.entries(incomingPagefind.meta)) {
+      if (!metaMap.has(key)) {
+        metaMap.set(key, new Set());
+      }
+      const normalized = normalizeValues(value);
+      if (!normalized.length) continue;
+      const bucket = metaMap.get(key)!;
+      normalized.forEach((entry) => bucket.add(entry));
+    }
+  }
+}
+
+const filterEntries = Array.from(filterMap.entries()).map(([key, set]) => [key, Array.from(set)] as const);
+const metaEntries = Array.from(metaMap.entries()).map(([key, set]) => [key, Array.from(set)] as const);
+---
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title} | {SITE_TITLE}</title>
+  <meta name="description" content={pageDescription} />
+  <meta name="keywords" content={tags ? tags.join(',') : SITE_KEYWORDS.join(',')} />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content={pageAuthor} />
+  <link rel="canonical" href={Astro.url.href} />
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content={`${title} | ${SITE_TITLE}`} />
+  <meta property="og:description" content={pageDescription} />
+  <meta property="og:type" content={type === 'article' ? 'article' : 'website'} />
+  <meta property="og:image" content={pageImage} />
+  <meta property="og:url" content={Astro.url.href} />
+  <meta property="og:site_name" content={SITE_TITLE} />
+  {type === 'article' && pubDate && (
+    <>
+      <meta property="article:published_time" content={new Date(pubDate).toISOString()} />
+      <meta property="article:author" content={pageAuthor} />
+      {tags && tags.map((tag: string) => <meta property="article:tag" content={tag} />)}
+    </>
+  )}
+  
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={`${title} | ${SITE_TITLE}`} />
+  <meta name="twitter:description" content={pageDescription} />
+  <meta name="twitter:image" content={pageImage} />
+  <meta name="twitter:site" content="@nickchen" />
+  
+  <!-- Additional SEO Meta Tags -->
+  <meta name="language" content="zh-CN" />
+  <meta name="revisit-after" content="7 days" />
+  <meta name="rating" content="general" />
+  
+  <!-- Sitemap -->
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  
+  <!-- favicon and icons -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico" />
+  
+  <!-- Structured Data -->
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  <script>
+    import { useTheme } from "../composables/useTheme";
+    useTheme().ensureInit();
+  </script>
+</head>
+
+  <body class="bg-white dark:bg-gray-900 dark:text-white">
+    <NavBar />
+    <main
+      class="pt-24 flex flex-col items-center"
+      data-pagefind-body={excludeFromSearch ? undefined : true}
+      data-pagefind-ignore={excludeFromSearch ? true : undefined}
+    >
+      <div class="
+        w-full max-w-6xl min-h-32
+        px-4 md:px-8 lg:px-12
+      ">
+        <slot />
+        {!excludeFromSearch && (filterEntries.length || metaEntries.length) && (
+          <div hidden aria-hidden="true">
+            {filterEntries.map(([key, values]) =>
+              values.map((value) => (
+                <span
+                  data-pagefind-filter={`${key}:${value}`}
+                  data-pagefind-meta={`${key}:${value}`}
+                />
+              )),
+            )}
+            {metaEntries.map(([key, values]) =>
+              values.map((value) => (
+                <span data-pagefind-meta={`${key}:${value}`} />
+              )),
+            )}
+          </div>
+        )}
+      </div>
+    </main>
+    <Footer />
+    <script is:inline src="/flowbite.min.js"></script>
+  </body>
+</html>

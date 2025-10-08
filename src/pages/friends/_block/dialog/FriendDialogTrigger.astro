@@ -1,0 +1,16 @@
+<button
+  class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors shadow-sm"
+  data-open-friend-dialog
+>
+  <span class="icon-[mdi--account-multiple-plus] w-5 h-5"></span>
+  申请友链
+</button>
+
+<script>
+    document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement
+    if (target.closest('[data-open-friend-dialog]')) {
+      document.dispatchEvent(new CustomEvent('open-friend-dialog'))
+    }
+  })
+</script>

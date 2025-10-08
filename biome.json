@@ -1,0 +1,65 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
+  "files": {
+    "includes": [
+      "src/**/*.{ts,tsx,js,mts,mjs,cjs,jsx,css,scss,json,yml,yaml}",
+      "!**/*.{css,scss}",
+      "!**/.DS_Store",
+      "!**/node_modules",
+      "!**/.env",
+      "!**/.env.*",
+      "!**/dist",
+      "!**/pnpm-lock.yaml",
+      "!**/package-lock.json",
+      "!**/yarn.lock"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": false,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 100,
+    "attributePosition": "auto",
+    "bracketSameLine": false,
+    "bracketSpacing": true,
+    "expand": "auto",
+    "useEditorconfig": true
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "a11y": { "noSvgWithoutTitle": "off" },
+      "complexity": { "noUselessContinue": "warn" },
+      "correctness": {
+        "noConstAssign": "error",
+        "noUndeclaredVariables": "error",
+        "noUnreachable": "error",
+        "noUnsafeFinally": "error",
+        "noUnusedImports": "warn",
+        "noUnusedLabels": "error",
+        "noUnusedPrivateClassMembers": "error",
+        "noUnusedVariables": "warn",
+        "useJsxKeyInIterable": "off"
+      },
+      "style": { "noDescendingSpecificity": "off", "noNonNullAssertion": "off" }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "jsxQuoteStyle": "double",
+      "quoteProperties": "asNeeded",
+      "trailingCommas": "es5",
+      "semicolons": "asNeeded",
+      "arrowParentheses": "always",
+      "bracketSameLine": false,
+      "quoteStyle": "single",
+      "attributePosition": "auto",
+      "bracketSpacing": true
+    }
+  },
+  "html": { "formatter": { "selfCloseVoidElements": "always" } },
+  "assist": { "enabled": null, "actions": { "source": { "organizeImports": "on" } } }
+}

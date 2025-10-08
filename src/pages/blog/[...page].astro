@@ -1,0 +1,142 @@
+---
+import Base from "../../layouts/Base.astro";
+import PostItem from "../../components/PostItem.astro";
+import { getCollection } from "astro:content";
+import { PAGE_SIZE, SITE_TITLE } from "../../consts";
+
+// 与 Astro 文档一致的分页对象类型
+// 参见 https://docs.astro.build/zh-cn/core-concepts/routing/#%E5%88%86%E9%A1%B5
+
+export const getStaticPaths = async ({ paginate }: { paginate: any }) => {
+  const posts = await getCollection("blog");
+  const sorted_posts = posts.sort((a, b) => {
+    return (
+      new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+    );
+  });
+
+  const totalPosts = sorted_posts.length;
+  const allTags = sorted_posts
+    .flatMap((post) => post.data.tags || [])
+    .filter(Boolean);
+  const uniqueTags = [...new Set(allTags)];
+
+  return paginate(sorted_posts, {
+    pageSize: PAGE_SIZE,
+    props: { totalPosts, uniqueTags },
+  });
+};
+
+const { page, totalPosts, uniqueTags } = Astro.props as {
+  page: any;
+  totalPosts: number;
+  uniqueTags: string[];
+};
+---
+
+<Base
+  title={`全部文章${page.current > 1 ? ` - 第 ${page.current} 页` : ""}`}
+  description={`浏览 ${SITE_TITLE} 的所有文章，共 ${totalPosts} 篇。${page.current > 1 ? `当前第 ${page.current}/${page.last} 页。` : ""}`}
+  type="website"
+  pagefind={{ filters: { 类型: '文章列表' } }}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- 页面标题和统计 -->
+    <div class="text-center mb-12">
+      <h1
+        class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-8 tracking-tight"
+      >
+        全部文章
+      </h1>
+
+      <!-- 统计信息 -->
+      <div class="flex flex-wrap justify-center gap-6 mb-8">
+        <div
+          class="flex items-center px-4 py-2 bg-blue-50 dark:bg-blue-900/20 rounded-full"
+        >
+          <span
+            class="icon-[hugeicons--google-doc] w-5 h-5 text-blue-600 dark:text-blue-400 mr-2"
+          ></span>
+          <span class="text-blue-600 dark:text-blue-400 font-medium">
+            {totalPosts} 篇文章
+          </span>
+        </div>
+
+        <div
+          class="flex items-center px-4 py-2 bg-green-50 dark:bg-green-900/20 rounded-full"
+        >
+          <span
+            class="icon-[tabler--tag-filled] w-5 h-5 text-green-600 dark:text-green-400 mr-2"
+          ></span>
+
+          <span class="text-green-600 dark:text-green-400 font-medium">
+            {uniqueTags.length} 个标签
+          </span>
+        </div>
+
+        <div
+          class="flex items-center px-4 py-2 bg-purple-50 dark:bg-purple-900/20 rounded-full"
+        >
+          <span
+            class="icon-[mingcute--time-fill] w-5 h-5 text-purple-600 dark:text-purple-400 mr-2"
+          ></span>
+
+          <span class="text-purple-600 dark:text-purple-400 font-medium">
+            最新更新
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="space-y-8">
+      {/* @ts-ignore */}
+      {page.data.map((post) => <PostItem post={post} />)}
+    </div>
+    {
+      totalPosts > 0 && (
+        <nav class="mt-12 flex justify-center" aria-label="分页导航">
+          <ul class="inline-flex items-center gap-2">
+            {page.url.prev && (
+              <li>
+                <a
+                  href={page.url.prev}
+                  class="px-3 py-2 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+                >
+                  上一页
+                </a>
+              </li>
+            )}
+            {Array.from({ length: Math.ceil(totalPosts / PAGE_SIZE) }).map(
+              (_, i) => {
+                const n = i + 1;
+                const href = n === 1 ? "/blog/" : `/blog/${n}/`;
+                const isActive = n === page.currentPage;
+                return (
+                  <li>
+                    <a
+                      href={href}
+                      aria-current={isActive ? "page" : undefined}
+                      class={`px-3 py-2 rounded-md ${isActive ? "bg-blue-600 text-white" : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"}`}
+                    >
+                      {n}
+                    </a>
+                  </li>
+                );
+              }
+            )}
+
+            {page.url.next && (
+              <li>
+                <a
+                  href={page.url.next}
+                  class="px-3 py-2 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+                >
+                  下一页
+                </a>
+              </li>
+            )}
+          </ul>
+        </nav>
+      )
+    }
+  </div>
+</Base>

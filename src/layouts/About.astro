@@ -1,0 +1,49 @@
+---
+import type { InferEntrySchema } from 'astro:content';
+import Base from './Base.astro';
+import '../styles/markdown.css';
+
+const frontmatter: InferEntrySchema<'blog'> = Astro.props.frontmatter || Astro.props;
+---
+
+<Base 
+  title={frontmatter.title}
+  description={frontmatter.description}
+  type="website"
+  pagefind={{ filters: { 类型: '关于' } }}
+>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- 页面头部 -->
+    <article class="prose prose-lg dark:prose-invert max-w-none">
+      <header class="mb-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-4 tracking-tight">
+          {frontmatter.title}
+        </h1>
+        
+        {frontmatter.description && (
+          <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-6">
+            {frontmatter.description}
+          </p>
+        )}
+      </header>
+
+      <main class="markdown-content">
+        <slot />
+      </main>
+      
+      <footer class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+        <div class="text-center">
+          <a 
+            href="/"
+            class="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium group"
+          >
+            <svg class="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+            </svg>
+            返回首页
+          </a>
+        </div>
+      </footer>
+    </article>
+  </div>
+</Base>

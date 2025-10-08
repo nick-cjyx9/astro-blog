@@ -1,0 +1,32 @@
+---
+import { type InferEntrySchema } from "astro:content"
+const friend: InferEntrySchema<'friend'> = Astro.props.friend
+---
+
+<a 
+  href={friend.link} 
+  target="_blank"
+  rel="noopener noreferrer"
+  class="group flex items-center p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 dark:bg-gray-800 dark:border-gray-700 hover:scale-105"
+  style={`border-top: 4px solid ${friend.color}`}
+>
+  <img 
+    class="w-14 h-14 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600" 
+    src={friend.avatar} 
+    alt={`${friend.name}的头像`}
+    loading="lazy"
+  />
+  <div class="ml-4 flex-1">
+    <div class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+      {friend.name}
+    </div>
+    {friend.description && (
+      <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+        {friend.description}
+      </div>
+    )}
+  </div>
+  <div class="ml-4">
+      <span class="icon-[line-md--arrow-right] w-5 h-5 text-blue-600 dark:text-blue-400 transform group-hover:translate-x-1 transition-transform"></span>
+  </div>
+</a>

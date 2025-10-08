@@ -1,0 +1,61 @@
+---
+import Base from "../layouts/Base.astro";
+import Hero from "./_block/Hero.astro";
+import LatestPosts from "./_block/LatestPosts.astro";
+import Projects from "./_block/Projects.astro";
+import AboutCard from "./_block/AboutCard.astro";
+import BlogStats from "./_block/BlogStats.astro";
+import Quote from "./_block/Quote.astro";
+import { SITE_DESCRIPTION } from "../consts";
+---
+
+<Base 
+  title="首页" 
+  description={SITE_DESCRIPTION}
+  type="website"
+  pagefind={{ filters: { 类型: '主页' } }}
+>
+  <!-- Hero Section -->
+  <div class="relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Hero />
+    </div>
+  </div>
+
+  <!-- Latest Posts Section -->
+  <div class="border-t border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <LatestPosts />
+    </div>
+  </div>
+
+  <!-- About Card Section -->
+  <div class="border-t border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <AboutCard />
+    </div>
+  </div>
+
+
+  <!-- Projects Section -->
+  <div class="border-t border-gray-200 dark:border-gray-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Projects />
+    </div>
+  </div>
+
+  <!-- Blog Stats Section -->
+  <div class="border-t border-gray-200 dark:border-gray-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <BlogStats />
+    </div>
+  </div>
+
+  <!-- Quote Section -->
+  <div class="border-t border-gray-200 dark:border-gray-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Quote />
+    </div>
+  </div>
+</Base>
+

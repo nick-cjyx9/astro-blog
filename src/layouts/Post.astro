@@ -1,0 +1,120 @@
+---
+import type { InferEntrySchema } from 'astro:content';
+import Base from './Base.astro';
+import '../styles/markdown.css';
+import { formatDate, formatRelativeTime, formatISODate } from '../utils/date';
+import { Image } from 'astro:assets';
+
+const frontmatter: InferEntrySchema<'blog'> = Astro.props.frontmatter || Astro.props;
+
+const relativeTime = formatRelativeTime(frontmatter.pubDate);
+const formattedDate = formatDate(frontmatter.pubDate);
+const isoDate = formatISODate(frontmatter.pubDate);
+
+const pagefind = {
+  filters: {
+    类型: '文章',
+    ...(frontmatter.tags?.length ? { 标签: frontmatter.tags } : {}),
+  },
+  meta: {
+    ...(frontmatter.author ? { 作者: frontmatter.author } : {}),
+    发布: formattedDate,
+  },
+};
+---
+
+<Base 
+  title={frontmatter.title}
+  description={frontmatter.description}
+  image={frontmatter.heroImage?.src}
+  pubDate={frontmatter.pubDate}
+  author={frontmatter.author}
+  tags={frontmatter.tags}
+  type="article"
+  pagefind={pagefind}
+>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <article class="prose prose-lg dark:prose-invert max-w-none">
+      <header class="mb-10 pb-8 border-b border-gray-200 dark:border-gray-700">
+        {frontmatter.heroImage && (
+          <figure class="relative mb-10 group -mx-4 sm:mx-0">
+            <div class="overflow-hidden bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 sm:p-1">
+              <Image
+                src={frontmatter.heroImage}
+                alt={`${frontmatter.title} - 文章封面`}
+                class="w-full h-56 sm:h-64 md:h-80 lg:h-96 object-cover transition-transform duration-300 group-hover:scale-105"
+                loading="eager"
+                quality={90}
+                widths={[400, 800, 1200]}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 800px, 1200px"
+              />
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </figure>
+        )}
+        <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-tight mb-8 tracking-tight">
+          {frontmatter.title}
+        </h1>
+        <div class="flex flex-wrap items-center gap-6 text-sm text-gray-600 dark:text-gray-400 mb-8">
+          <!-- 发布时间 -->
+          <div class="flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+            </svg>
+            <time datetime={isoDate} class="font-medium">
+              {formattedDate}
+            </time>
+            <span>（{relativeTime}）</span>
+          </div>
+          
+          <!-- 作者 -->
+          {frontmatter.author && (
+            <div class="flex items-center">
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+              </svg>
+              <span class="font-medium">{frontmatter.author}</span>
+            </div>
+          )}
+        
+        <!-- 标签 -->
+        {frontmatter.tags && frontmatter.tags.length > 0 && (
+          <div class="flex flex-wrap gap-2">
+            {frontmatter.tags.map((tag) => (
+              <a
+                href={`/tags/${tag}`}
+                class="inline-flex items-center px-3 py-1.5 text-sm font-medium bg-blue-50 text-blue-700 rounded-full hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50 transition-colors"
+              >
+                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>
+                </svg>
+                {tag}
+              </a>
+            ))}
+          </div>
+        )}
+      </header>
+
+      <!-- 文章内容 -->
+      <main class="markdown-content mt-8">
+        <slot />
+      </main>
+      
+      <!-- 文章底部 -->
+      <footer class="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div class="inline-flex"></div>
+          <a 
+            href="/blog"
+            class="inline-flex items-center text-base text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium group"
+          >
+            <svg class="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+            </svg>
+            返回文章列表
+          </a>
+      </footer>
+    </article>
+  </div>
+  <script src="../scripts/code-blocks.js" />
+</Base>

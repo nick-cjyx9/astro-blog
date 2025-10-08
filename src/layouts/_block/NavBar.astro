@@ -1,0 +1,176 @@
+---
+import DarkModeSwitcher from './DarkModeSwitcher.astro';
+import {
+  SITE_TITLE
+} from '../../consts';
+import { Image } from 'astro:assets';
+import favicon from '/public/favicon.ico';
+const nav_items = [
+  {
+    text: '主页',
+    href: '/',
+  },
+  {
+    text: '文章',
+    href: '/blog',
+  },
+  {
+    text: '标签',
+    href: '/tags',
+  },
+  {
+    text: '友链',
+    href: '/friends',
+  },
+  {
+    text: '关于',
+    href: '/about',
+  },
+];
+---
+
+<nav class="bg-white/80 backdrop-blur-md border-gray-200 dark:bg-gray-900/80 border-b dark:border-gray-700 fixed top-0 left-0 right-0 z-50 shadow-sm">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <a href='/' class="flex items-center space-x-3">
+          <Image src={favicon} width="28" height="28" alt="blog Logo" class="rounded-md" />
+          <span class="font-serif text-xl font-bold text-gray-900 dark:text-white">
+            {SITE_TITLE}
+          </span>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:block">
+        <div class="flex items-center space-x-1">
+          {
+            nav_items.map((item) => (
+              <a
+                href={item.href}
+                class={
+                  (item.href === '/' ? Astro.url.pathname === item.href : Astro.url.pathname === item.href || Astro.url.pathname.startsWith(`${item.href}/`))
+                    ? 'px-4 py-2 rounded-md text-sm font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 transition-colors'
+                    : 'px-4 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-gray-800 transition-colors'
+                }
+              >
+                {item.text}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Right side actions -->
+      <div class="flex items-center space-x-3">
+        <!-- Search button -->
+        <a
+          href="/search"
+          class="md:ml-1 inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-500"
+          title="搜索"
+        >
+          <span class="md:w-5 md:h-5 w-6 h-6 icon-[mingcute--search-line]"></span>
+        </a>
+
+        <!-- Dark mode switcher -->
+        <DarkModeSwitcher />
+
+        <!-- Mobile menu button -->
+        <button
+          data-collapse-toggle="navbar"
+          type="button"
+          class="md:ml-1 inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-500"
+          aria-controls="navbar"
+          aria-expanded="false"
+        >
+          <span class="sr-only">打开菜单</span>
+          <span class="md:w-5 md:h-5 w-6 h-6 icon-[line-md--menu]"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div class="md:hidden hidden" id="navbar">
+      <div class="px-2 pt-2 pb-3 space-y-1 border-t dark:border-gray-700">
+        {
+          nav_items.map((item) => (
+            <a
+              href={item.href}
+              class={
+                (item.href === '/' ? Astro.url.pathname === item.href : Astro.url.pathname === item.href || Astro.url.pathname.startsWith(`${item.href}/`))
+                  ? 'block px-3 py-2 rounded-md text-base font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300'
+                  : 'block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-gray-800'
+              }
+            >
+              {item.text}
+            </a>
+          ))
+        }
+        <!-- Mobile search link -->
+        <a
+          href="/search"
+          class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-gray-800"
+        >
+          搜索
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+<script>
+  // Mobile menu toggle functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const menuButton = document.querySelector('[data-collapse-toggle="navbar"]') as HTMLButtonElement;
+    const mobileMenu = document.getElementById('navbar') as HTMLElement;
+    
+    if (menuButton && mobileMenu) {
+      menuButton.addEventListener('click', function() {
+        const isHidden = mobileMenu.classList.contains('hidden');
+        
+        if (isHidden) {
+          mobileMenu.classList.remove('hidden');
+          menuButton.setAttribute('aria-expanded', 'true');
+        } else {
+          mobileMenu.classList.add('hidden');
+          menuButton.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    // Close mobile menu when clicking on a link
+    const mobileLinks = mobileMenu?.querySelectorAll('a');
+    mobileLinks?.forEach(link => {
+      link.addEventListener('click', () => {
+        if (mobileMenu) {
+          mobileMenu.classList.add('hidden');
+          menuButton?.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const target = event.target as Node;
+      if (menuButton && mobileMenu && target && !menuButton.contains(target) && !mobileMenu.contains(target)) {
+        mobileMenu.classList.add('hidden');
+        menuButton.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+
+  // Existing pagefind functionality
+  const drawer = document.querySelector(".pagefind-ui__drawer");
+  const search = document.querySelector(".pagefind-ui__search-input");
+
+  if (search && drawer) {
+    search.addEventListener("focus", () => {
+      drawer.classList.remove("hidden");
+    });
+    search.addEventListener("blur", () => {
+      setTimeout(() => {
+        drawer.classList.add("hidden");
+      }, 200);
+    });
+  }
+</script>

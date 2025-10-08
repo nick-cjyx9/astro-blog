@@ -1,0 +1,182 @@
+---
+import { getCollection } from 'astro:content';
+import { formatDate } from '../../utils/date';
+
+// 获取博客统计数据
+const posts = await getCollection('blog');
+const friends = await getCollection('friend');
+
+// 计算统计信息
+const totalPosts = posts.length;
+const totalFriends = friends.length;
+
+// 获取所有标签
+const allTags = posts
+  .flatMap(post => post.data.tags || [])
+  .filter(Boolean);
+const uniqueTags = [...new Set(allTags)];
+const totalTags = uniqueTags.length;
+
+// 计算最近30天的文章数
+const thirtyDaysAgo = new Date();
+thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+const recentPosts = posts.filter(post => new Date(post.data.pubDate) > thirtyDaysAgo).length;
+
+// 获取最新文章发布时间
+const latestPost = posts
+  .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())[0];
+
+// 获取热门标签 (出现频率最高的前5个)
+const tagCount: Record<string, number> = allTags.reduce((acc, tag) => {
+  acc[tag] = (acc[tag] || 0) + 1;
+  return acc;
+}, {} as Record<string, number>);
+
+const popularTags = Object.entries(tagCount)
+  .sort(([,a], [,b]) => (b as number) - (a as number))
+  .slice(0, 5)
+  .map(([tag, count]) => ({ name: tag, count: count as number }));
+---
+
+<section class="w-full py-16">
+  <div class="mb-12 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+      博客统计
+    </h2>
+    <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+      数据见证成长的每一步
+    </p>
+  </div>
+
+  <!-- 主要统计数据 -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+    <!-- 文章总数 -->
+    <div class="bg-white border border-gray-200 rounded-lg p-6 text-center hover:shadow-md transition-shadow dark:bg-gray-800 dark:border-gray-700">
+      <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mx-auto mb-4">
+        <span class="icon-[hugeicons--google-doc] w-6 h-6 text-blue-600 dark:text-blue-400"></span>
+      </div>
+      <div class="text-2xl font-bold text-gray-900 dark:text-white mb-1">{totalPosts}</div>
+      <div class="text-sm text-gray-500 dark:text-gray-400">文章总数</div>
+    </div>
+
+    <!-- 标签数量 -->
+    <div class="bg-white border border-gray-200 rounded-lg p-6 text-center hover:shadow-md transition-shadow dark:bg-gray-800 dark:border-gray-700">
+      <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mx-auto mb-4">
+        <span class="icon-[tabler--tag-filled] w-5 h-5 text-green-600 dark:text-green-400"></span>
+      </div>
+      <div class="text-2xl font-bold text-gray-900 dark:text-white mb-1">{totalTags}</div>
+      <div class="text-sm text-gray-500 dark:text-gray-400">标签数量</div>
+    </div>
+
+    <!-- 友链数量 -->
+    <div class="bg-white border border-gray-200 rounded-lg p-6 text-center hover:shadow-md transition-shadow dark:bg-gray-800 dark:border-gray-700">
+      <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mx-auto mb-4">
+        <span class="icon-[fa-solid--user-friends] w-6 h-6 text-purple-600 dark:text-purple-400"></span>
+      </div>
+      <div class="text-2xl font-bold text-gray-900 dark:text-white mb-1">{totalFriends}</div>
+      <div class="text-sm text-gray-500 dark:text-gray-400">友情链接</div>
+    </div>
+
+    <!-- 近期活跃 -->
+    <div class="bg-white border border-gray-200 rounded-lg p-6 text-center hover:shadow-md transition-shadow dark:bg-gray-800 dark:border-gray-700">
+      <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center mx-auto mb-4">
+        <span class="icon-[mingcute--time-fill] w-6 h-6 text-orange-600 dark:text-orange-400"></span>
+      </div>
+      <div class="text-2xl font-bold text-gray-900 dark:text-white mb-1">{recentPosts}</div>
+      <div class="text-sm text-gray-500 dark:text-gray-400">最近30天</div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- 热门标签 -->
+    <div class="bg-white border border-gray-200 rounded-lg p-6 dark:bg-gray-800 dark:border-gray-700">
+      <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
+        <span class="icon-[mdi--fire] w-5 h-5 mr-2 text-blue-500"></span>
+        热门标签
+      </h3>
+      <div class="space-y-3">
+        {popularTags.map((tag, index) => (
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div class={`w-2 h-2 rounded-full mr-3 ${
+                index === 0 ? 'bg-yellow-500' :
+                index === 1 ? 'bg-gray-400' :  
+                index === 2 ? 'bg-orange-600' :
+                'bg-blue-500'
+              }`}></div>
+              <span class="text-gray-700 dark:text-gray-300 font-medium">
+                {tag.name}
+              </span>
+            </div>
+            <div class="flex items-center">
+              <span class="text-sm text-gray-500 dark:text-gray-400 mr-2">
+                {tag.count} 篇
+              </span>
+              <div class="w-20 bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+                <div 
+                  class={`h-2 rounded-full ${
+                    index === 0 ? 'bg-yellow-500' :
+                    index === 1 ? 'bg-gray-400' :  
+                    index === 2 ? 'bg-orange-600' :
+                    'bg-blue-500'
+                  }`}
+                  style={`width: ${(tag.count / Math.max(...popularTags.map(t => t.count as number))) * 100}%`}
+                ></div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- 最新动态 -->
+    <div class="bg-white border border-gray-200 rounded-lg p-6 dark:bg-gray-800 dark:border-gray-700">
+      <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
+        <span class="icon-[line-md--calendar] w-5 h-5 mr-2 text-green-500"></span>
+        最新动态
+      </h3>
+      <div class="space-y-4">
+        {latestPost && (
+          <div class="border-l-4 border-blue-500 pl-4">
+            <div class="flex items-center mb-2">
+              <div class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+              <span class="text-sm text-green-600 dark:text-green-400 font-medium">最新文章</span>
+            </div>
+            <h4 class="text-gray-900 dark:text-white font-medium mb-1">
+              {latestPost.data.title}
+            </h4>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              发布于 {formatDate(latestPost.data.pubDate)}
+            </p>
+          </div>
+        )}
+        
+        <div class="border-l-4 border-purple-500 pl-4">
+          <div class="flex items-center mb-2">
+            <div class="w-2 h-2 bg-purple-500 rounded-full mr-2"></div>
+            <span class="text-sm text-purple-600 dark:text-purple-400 font-medium">网站状态</span>
+          </div>
+          <p class="text-gray-700 dark:text-gray-300 font-medium mb-1">
+            正常运行中
+          </p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            基于 Astro 构建，持续优化中
+          </p>
+        </div>
+
+        <div class="border-l-4 border-orange-500 pl-4">
+          <div class="flex items-center mb-2">
+            <div class="w-2 h-2 bg-orange-500 rounded-full mr-2"></div>
+            <span class="text-sm text-orange-600 dark:text-orange-400 font-medium">近期计划</span>
+          </div>
+          <p class="text-gray-700 dark:text-gray-300 font-medium mb-1">
+            添加评论系统
+          </p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            计划集成 Giscus 评论系统
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

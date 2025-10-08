@@ -1,0 +1,34 @@
+---
+import { SITE_TITLE, SITE_URL, SITE_DESCRIPTION, AUTHOR_AVATAR } from '../../../../consts';
+import FriendApplyDialog from './FriendApplyDialog.vue';
+
+const siteInfo = {
+  title: SITE_TITLE,
+  url: SITE_URL,
+  description: SITE_DESCRIPTION,
+  avatar: AUTHOR_AVATAR
+};
+---
+
+<div id="friend-apply-dialog">
+  <FriendApplyDialog 
+    client:only="vue"
+    siteInfo={siteInfo}
+  />
+</div>
+
+<script>
+  import { notify } from '../../../../components/notification';
+
+  document.addEventListener('open-friend-dialog', () => {
+    const dialogContainer = document.getElementById('friend-apply-dialog');
+    if (dialogContainer) {
+      dialogContainer.dispatchEvent(new CustomEvent('open-dialog'));
+    }
+  });
+  document.addEventListener('vue:notify', ((event: CustomEvent) => {
+    const { type, message } = event.detail;
+    notify[type as keyof typeof notify](message);
+  }) as EventListener);
+</script>
+

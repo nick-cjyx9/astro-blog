@@ -1,0 +1,31 @@
+---
+import Base from '../../layouts/Base.astro';
+import FriendCard from './_block/FriendCard.astro';
+import { getCollection } from 'astro:content';
+import { SITE_TITLE } from '../../consts';
+import FriendApplyDialog from './_block/FriendApplyDialog.astro';
+import FriendDialogTrigger from './_block/dialog/FriendDialogTrigger.astro';
+const friends = await getCollection('friend');
+---
+
+<Base
+  title={`友链 | ${SITE_TITLE}`}
+  description={`本站的友链列表与申请方式。`}
+  pagefind={{ filters: { 类型: '友链' } }}
+>
+  <section class="pb-10">
+    <div class="flex items-center justify-between flex-wrap gap-4 mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white">友链</h1>
+      <FriendDialogTrigger />
+    </div>
+    {friends.length === 0 && (
+      <p class="text-gray-500 dark:text-gray-400">暂时还没有友链，快来第一个申请吧～</p>
+    )}
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {friends.map(f => (
+        <FriendCard friend={f.data} />
+      ))}
+    </div>
+  </section>
+  <FriendApplyDialog />
+</Base>

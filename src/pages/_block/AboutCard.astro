@@ -1,0 +1,142 @@
+---
+import { AUTHOR_NAME } from '../../consts';
+
+const aboutInfo = {
+  name: AUTHOR_NAME,
+  role: "学生 | 前端热爱者",
+  location: "江苏 | 四川",
+  email: "i@nickchen.top",
+  interests: ["Web", "开源", "文学", "二次元"],
+  currentStatus: "CTF WEB 方向学习中！",
+  experience: "",
+  languages: ["JavaScript", "TypeScript", "Python"],
+  socialLinks: [
+    {
+      name: "GitHub",
+      url: "https://github.com/nick-cjyx9",
+      icon: "github"
+    },
+    {
+      name: "Email",
+      url: "mailto:i@nickchen.top",
+      icon: "email"
+    }
+  ]
+};
+---
+
+<section class="w-full py-16">
+  <div class="mb-12 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+      关于我
+    </h2>
+    <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+      了解更多关于我的技术背景和个人信息
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- 个人信息卡片 -->
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-8 dark:bg-gray-800 dark:border-gray-700">
+      <div class="flex items-center mb-6">
+        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mr-4">
+          {aboutInfo.name.charAt(0)}
+        </div>
+        <div>
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
+            {aboutInfo.name}
+          </h3>
+          <p class="text-blue-600 dark:text-blue-400 font-medium">
+            {aboutInfo.role}
+          </p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div class="flex items-center text-gray-600 dark:text-gray-300">
+          <span class="icon-[fluent--location-16-filled] w-5 h-5 mr-3 text-gray-400"></span>
+          {aboutInfo.location}
+        </div>
+
+        <div class="flex items-center text-gray-600 dark:text-gray-300">
+          <span class="icon-[ic--round-mail] w-5 h-5 mr-3 text-gray-400"></span>
+          {aboutInfo.email}
+        </div>
+      </div>
+
+      <!-- 当前状态 -->
+      <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-500">
+        <div class="flex items-center">
+          <div class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+          <span class="text-sm font-medium text-blue-800 dark:text-blue-200">当前状态</span>
+        </div>
+        <p class="text-sm text-blue-700 dark:text-blue-300 mt-2 pl-4">
+          {aboutInfo.currentStatus}
+        </p>
+      </div>
+    </div>
+
+    <!-- 兴趣爱好和技能 -->
+    <div class="space-y-6">
+      <!-- 兴趣爱好 -->
+      <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 dark:bg-gray-800 dark:border-gray-700">
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+          <span class="icon-[line-md--heart-filled] w-5 h-5 mr-2 text-purple-500"></span>
+          兴趣爱好
+        </h4>
+        <div class="flex flex-wrap gap-2">
+          {aboutInfo.interests.map((interest) => (
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-200 dark:text-purple-800">
+              {interest}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <!-- 主要语言 -->
+      <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 dark:bg-gray-800 dark:border-gray-700">
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+          <span class="icon-[iconoir--code] w-5 h-5 mr-2 text-green-500"></span>
+          主要语言
+        </h4>
+        <div class="space-y-2">
+          {aboutInfo.languages.map((language) => (
+            <div class="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+              <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                {language}
+              </span>
+              <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- 社交链接 -->
+      <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 dark:bg-gray-800 dark:border-gray-700">
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+          <span class="icon-[ic--round-mail] w-5 h-5 mr-2 text-blue-500"></span>
+          联系方式
+        </h4>
+        <div class="flex space-x-4">
+          {aboutInfo.socialLinks.map((link) => (
+            <a 
+              href={link.url}
+              target={link.name !== "Email" ? "_blank" : undefined}
+              rel={link.name !== "Email" ? "noopener noreferrer" : undefined}
+              class="group flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-full transition-colors duration-200"
+              title={link.name}
+            >
+              {link.icon === "github" && (
+                <span class="icon-[mdi--github] w-5 h-5 text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"></span>
+              )}
+              {link.icon === "email" && (
+                <span class="icon-[ic--round-mail] w-5 h-5 text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"></span>
+              )}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>

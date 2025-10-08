@@ -1,0 +1,39 @@
+<script>
+  import { getHitokoto } from '../../utils/api';
+  const textEl = document.getElementById('quote-text');
+  const authorEl = document.getElementById('quote-author');
+  async function loadQuote() {
+    if (!textEl || !authorEl) return;
+    textEl.textContent = 'Loading...';
+    const res = await getHitokoto('a');
+    if (res.ok) {
+      textEl.textContent = res.data.hitokoto || '...';
+      authorEl.textContent = `— 《${res.data.from}》`;
+    } else {
+      textEl.textContent = '获取句子失败';
+      authorEl.textContent = '(error)';
+    }
+  }
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(loadQuote);
+  } else {
+    setTimeout(loadQuote, 0);
+  }
+</script>
+<section class="pt-16 pb-4 relative">
+  <div class="relative max-w-4xl mx-auto text-center px-4">
+    <div class="mb-8">
+      <h2 class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-6">
+        一言 · Hitokoto
+      </h2>
+    </div>
+    <blockquote class="relative">
+  <p id="quote-text" class="text-lg md:text-xl lg:text-2xl font-light text-gray-800 dark:text-gray-200 leading-relaxed mb-8 max-w-3xl mx-auto">Loading...</p>
+      <footer class="flex items-center justify-center">
+        <div class="flex items-center space-x-3">          
+          <cite id="quote-author" class="text-sm md:text-base font-medium text-gray-500 dark:text-gray-400 not-italic">— NoName</cite>
+        </div>
+      </footer>
+    </blockquote>
+  </div>
+</section>
